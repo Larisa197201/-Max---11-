@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Суффиксы -ОВА-/-ЕВА-, -ЫВА-/-ИВА- | Тренажёр от Макса</title>
+  <style>
+    :root {
+      --bg: #faf5ff;
+      --card: #ffffff;
+      --text: #1e1b4b;
+      --muted: #6b7280;
+      --accent: #8b5cf6;
+      --accent2: #7c3aed;
+      --ok: #16a34a;
+      --bad: #dc2626;
+      --warn: #d97706;
+      --border: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #f3e8ff, transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(124, 58, 237, 0.25);
+      margin-bottom: 20px;
+    }
+
+    h1 { margin: 0 0 8px; font-size: clamp(22px, 4vw, 32px); }
+    .subtitle { margin: 0; opacity: 0.94; font-size: 15px; }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      transition: 0.2s;
+      box-shadow: 0 8px 18px rgba(139, 92, 246, 0.25);
+    }
+
+    .btn:hover { background: var(--accent2); transform: translateY(-1px); }
+    
+    .btn.ghost {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid #cbd5e1;
+      box-shadow: none;
+    }
+    .btn.ghost:hover { background: #f8fafc; }
+
+    .total {
+      margin-left: auto;
+      font-weight: 700;
+      color: #4c1d95;
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      border: 1px solid #f1f5f9;
+    }
+
+    .word-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-bottom: 1px dashed #e5e7eb;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .word-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .word-row:first-child { padding-top: 0; }
+
+    .word-text {
+      font-size: 18px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      min-width: 180px;
+    }
+
+    .blank {
+      display: inline-block;
+      min-width: 45px;
+      text-align: center;
+      font-weight: 800;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      margin: 0 2px;
+      transition: 0.3s;
+      font-size: 16px;
+      text-transform: uppercase;
+    }
+
+    .letter-options {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .letter-btn {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 2px solid #cbd5e1;
+      background: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s;
+      color: #334155;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .letter-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .letter-btn.selected {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .word-row.correct .blank { color: var(--ok); border-color: var(--ok); }
+    .word-row.correct .letter-btn.selected { background: var(--ok); border-color: var(--ok); }
+    
+    .word-row.wrong .blank { color: var(--bad); border-color: var(--bad); }
+    .word-row.wrong .letter-btn.selected { background: var(--bad); border-color: var(--bad); }
+
+    .explain {
+      width: 100%;
+      font-size: 14px;
+      color: #475569;
+      background: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-top: 10px;
+      display: none;
+      border-left: 4px solid #a78bfa;
+    }
+    .word-row.correct .explain, .word-row.wrong .explain { display: block; }
+
+    @media (max-width: 600px) {
+      .word-row { flex-direction: column; align-items: flex-start; }
+      .letter-options { width: 100%; }
+      .letter-btn { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Суффиксы глаголов: -ОВА-/-ЕВА-, -ЫВА-/-ИВА-</h1>
+      <p class="subtitle">
+        Выберите правильный суффикс. <br>
+        <b>Подсказка:</b> поставьте глагол в 1-е лицо (я). Если он оканчивается на <b>-ую/-юю</b> — пишем О/Е. Если на <b>-ываю/-иваю</b> — пишем Ы/И.
+      </p>
+    </header>
+
+    <div class="toolbar">
+      <button class="btn" id="checkAll">Проверить всё</button>
+      <button class="btn ghost" id="resetAll">Сбросить всё</button>
+      <div class="total" id="total">Выполнено: 0 из 15 • Верно: 0</div>
+    </div>
+
+    <main id="tasks">
+      <section class="card">
+        <div id="words-container"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // 15 слов вразброс
+    const wordsData = [
+      { id: 1, text: "команд_ть", correct: "ова", expl: "Проверяем: я командую (на -ую). Значит, пишем ОВА." },
+      { id: 2, text: "рассказ_ть", correct: "ыва", expl: "Проверяем: я рассказываю (на -ываю). Значит, пишем ЫВА." },
+      { id: 3, text: "ноч_ть", correct: "ева", expl: "Проверяем: я ночую (на -ую). Значит, пишем ЕВА." },
+      { id: 4, text: "наста_ть", correct: "ива", expl: "Проверяем: я настаиваю (на -иваю). Значит, пишем ИВА." },
+      { id: 5, text: "совет_ть", correct: "ова", expl: "Проверяем: я советую (на -ую). Значит, пишем ОВА." },
+      { id: 6, text: "рассматр_ть", correct: "ива", expl: "Проверяем: я рассматриваю (на -иваю). Значит, пишем ИВА." },
+      { id: 7, text: "танц_ть", correct: "ева", expl: "Проверяем: я танцую (на -ую). Значит, пишем ЕВА." },
+      { id: 8, text: "подсказ_ть", correct: "ыва", expl: "Проверяем: я подсказываю (на -ываю). Значит, пишем ЫВА." },
+      { id: 9, text: "гор_ть", correct: "ева", expl: "Проверяем: я горюю (на -юю). Значит, пишем ЕВА." },
+      { id: 10, text: "использ_ть", correct: "ова", expl: "Проверяем: я использую (на -ую). Значит, пишем ОВА." },
+      { id: 11, text: "придум_ть", correct: "ыва", expl: "Проверяем: я придумываю (на -ываю). Значит, пишем ЫВА." },
+      { id: 12, text: "завед_ть", correct: "ова", expl: "Проверяем: я заведую (на -ую). Значит, пишем ОВА." },
+      { id: 13, text: "накле_ть", correct: "ива", expl: "Проверяем: я наклеиваю (на -иваю). Значит, пишем ИВА." },
+      { id: 14, text: "разве_ть", correct: "ива", expl: "Проверяем: я развеиваю (на -иваю). Значит, пишем ИВА." },
+      { id: 15, text: "застр_ть", correct: "ева", expl: "Проверяем: я застреваю (на -еваю). Значит, пишем ЕВА." }
+    ];
+
+    const container = document.getElementById("words-container");
+    const options = ["ова", "ева", "ыва", "ива"];
+
+    wordsData.forEach(word => {
+      const parts = word.text.split("_");
+      
+      let buttonsHTML = "";
+      options.forEach(opt => {
+        buttonsHTML += `<button class="letter-btn" data-letter="${opt}">${opt.toUpperCase()}</button>`;
+      });
+
+      const row = document.createElement("div");
+      row.className = "word-row";
+      row.dataset.wordId = word.id;
+      row.dataset.correct = word.correct;
+
+      row.innerHTML = `
+        <div class="word-text">
+          ${parts[0]}<span class="blank">?</span>${parts[1]}
+        </div>
+        <div class="letter-options">
+          ${buttonsHTML}
+        </div>
+        <div class="explain">${word.expl}</div>
+      `;
+
+      container.appendChild(row);
+    });
+
+    // Обработка нажатий на кнопки
+    document.querySelectorAll(".letter-btn").forEach(btn => {
+      btn.addEventListener("click", function() {
+        const row = this.closest(".word-row");
+        if (row.classList.contains("correct")) return; 
+
+        row.querySelectorAll(".letter-btn").forEach(b => b.classList.remove("selected"));
+        this.classList.add("selected");
+        
+        row.classList.remove("wrong");
+        row.querySelector(".blank").textContent = "?";
+      });
+    });
+
+    function checkRow(row) {
+      const selectedBtn = row.querySelector(".letter-btn.selected");
+      const correctLetter = row.dataset.correct;
+      const blank = row.querySelector(".blank");
+
+      if (!selectedBtn) {
+        blank.textContent = "?";
+        row.classList.remove("correct", "wrong");
+        return null; 
+      }
+
+      const selectedLetter = selectedBtn.dataset.letter;
+      
+      if (selectedLetter === correctLetter) {
+        row.classList.add("correct");
+        row.classList.remove("wrong");
+        blank.textContent = selectedLetter.toUpperCase();
+        return true;
+      } else {
+        row.classList.add("wrong");
+        row.classList.remove("correct");
+        blank.textContent = correctLetter.toUpperCase(); 
+        return false;
+      }
+    }
+
+    document.getElementById("checkAll").addEventListener("click", () => {
+      const rows = document.querySelectorAll(".word-row");
+      rows.forEach(row => checkRow(row));
+      updateTotal();
+    });
+
+    document.getElementById("resetAll").addEventListener("click", () => {
+      document.querySelectorAll(".word-row").forEach(row => {
+        row.classList.remove("correct", "wrong");
+        row.querySelector(".blank").textContent = "?";
+        row.querySelectorAll(".letter-btn").forEach(b => b.classList.remove("selected"));
+      });
+      updateTotal();
+    });
+
+    function updateTotal() {
+      const rows = document.querySelectorAll(".word-row");
+      let done = 0;
+      let ok = 0;
+
+      rows.forEach(row => {
+        if (row.classList.contains("correct") || row.classList.contains("wrong")) {
+          done++;
+          if (row.classList.contains("correct")) ok++;
+        }
+      });
+
+      document.getElementById("total").textContent = `Выполнено: ${done} из ${wordsData.length} • Верно: ${ok}`;
+    }
+  </script>
+</body>
+</html>
